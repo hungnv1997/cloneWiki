@@ -1,0 +1,57 @@
+html,body{
+    margin:0;
+    font-family: sans-serif;
+}
+/*Panel*/
+.mw-panel{
+    font-size: 12px;
+    line-height: 20px;
+    width:160px;
+}
+li a {
+    text-decoration: none;
+}
+#p-avim a{
+    text-decoration: none;
+    padding-left: 15px;
+}
+#p-wikipedia-interaction-label{
+    padding-left: 40px;
+    padding-bottom: 2px;
+    border-bottom: 0.1px solid #999;
+    color: #333;
+    font-weight: normal;
+    font-size: 12px;
+}
+.mw-panel ul li, #p-wikipedia-interaction-label{
+    list-style: none;
+    margin-left: -25px;
+}
+li a:hover {
+    text-decoration: underline;
+}
+/*Logo*/
+.mw-wiki-logo {
+    margin: 1rem;
+    width:160px;
+    height: 160px;
+    background-image: url("https://loremflickr.com/160/160");
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+}
+.logo-title h2, p{
+   color: #fff;
+   text-align: center;
+   margin: 0; 
+}
+#character-logo{
+           font-size: 1.9rem;
+           color:#fff
+        }
+.logo-title h2, h1{
+    font-size: 1.3rem;
+    display: inline;
+}
