@@ -43,7 +43,7 @@
     </Draggable>
 
     <div class="thumb-number">
-      页面{{ templateIndex + 1 }} / {{ templates.length }}
+      Page {{ templateIndex + 1 }} / {{ templates.length }}
     </div>
   </div>
 </template>

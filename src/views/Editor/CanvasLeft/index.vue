@@ -55,23 +55,23 @@
       >
         <el-row class="help-pop-row">
           <IconGuideBoard class="help-pop-icon" />
-          <span class="help-pop-text">新手入门</span>
+          <span class="help-pop-text">Getting started</span>
         </el-row>
         <el-row class="help-pop-row">
           <IconVideoTwo class="help-pop-icon" />
-          <span class="help-pop-text">使用教程</span>
+          <span class="help-pop-text">Tutorials</span>
         </el-row>
         <el-row class="help-pop-row" @click="hasHotkey = true">
           <IconKeyboardOne class="help-pop-icon" />
-          <span class="help-pop-text">快捷键</span>
+          <span class="help-pop-text">Keyboard Shortcuts</span>
         </el-row>
         <el-row class="help-pop-row">
           <IconEdit class="help-pop-icon" />
-          <span class="help-pop-text">反馈建议</span>
+          <span class="help-pop-text">Feedback & Suggestions</span>
         </el-row>
         <el-row class="help-pop-row">
           <IconHeadsetOne class="help-pop-icon" />
-          <span class="help-pop-text">在线客服</span>
+          <span class="help-pop-text">Online support</span>
         </el-row>
       </el-popover>
 

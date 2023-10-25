@@ -2,74 +2,93 @@
   <div>
     <!-- <div class="resize-handler"></div> -->
     <div class="footer-left">
-      <el-tooltip placement="top" :hide-after="0" content="邀请协同">
-        <IconPeoples class="footer-button"/>
+      <el-tooltip
+        placement="top"
+        :hide-after="0"
+        :content="MULTILANG.export.joinMyTeam"
+      >
+        <IconPeoples class="footer-button" />
       </el-tooltip>
     </div>
     <div class="footer-right">
       <div class="right-handle" v-if="isChecked">
-        <FileInput :accept="'.json'" @change="files => loadFile(files)">
-          <el-tooltip placement="top" :hide-after="0" content="上传文件">
-            <IconUploadOne class="footer-button"/>
+        <FileInput :accept="'.json'" @change="(files) => loadFile(files)">
+          <el-tooltip
+            placement="top"
+            :hide-after="0"
+            :content="MULTILANG.export.uploadFile"
+          >
+            <IconUploadOne class="footer-button" />
           </el-tooltip>
         </FileInput>
       </div>
       <div class="right-handle">
-        <el-tooltip placement="top" :hide-after="0" content="下载文件">
-          <IconDownloadOne class="footer-button" @click="exportFile()"/>
+        <el-tooltip
+          placement="top"
+          :hide-after="0"
+          :content="MULTILANG.export.export_img"
+        >
+          <IconDownloadOne class="footer-button" @click="exportFile()" />
         </el-tooltip>
       </div>
       <div class="right-handle">
-        <el-tooltip placement="top" :hide-after="0" content="保存模板">
-          <IconSave class="footer-button" @click="exportFile()"/>
+        <el-tooltip
+          placement="top"
+          :hide-after="0"
+          :content="MULTILANG.export.saveTemplate"
+        >
+          <IconSave class="footer-button" @click="exportFile()" />
         </el-tooltip>
       </div>
     </div>
-    <ExportFile v-model:visible="exportFileDialog" @close="exportFileHide" @save="exportFileHandle"></ExportFile>
+    <ExportFile
+      v-model:visible="exportFileDialog"
+      @close="exportFileHide"
+      @save="exportFileHandle"
+    ></ExportFile>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import useCanvas from "@/views/Canvas/useCanvas"
-import useHandleElement  from '@/hooks/useHandleElement'
-import ExportFile from './components/index.vue'
-import { storeToRefs } from 'pinia'
-import { useFabricStore, useTemplatesStore } from '@/store'
+import { ref, watch } from "vue";
+import useCanvas from "@/views/Canvas/useCanvas";
+import useHandleElement from "@/hooks/useHandleElement";
+import ExportFile from "./components/index.vue";
+import { storeToRefs } from "pinia";
+import { useFabricStore, useTemplatesStore } from "@/store";
+import { MULTILANG } from "@/constants/multilang";
 
-const fabricStore = useFabricStore()
-const { isChecked } = storeToRefs(fabricStore)
-const exportFileDialog = ref(false)
-
+const fabricStore = useFabricStore();
+const { isChecked } = storeToRefs(fabricStore);
+const exportFileDialog = ref(false);
 
 const exportFileHide = () => {
-  exportFileDialog.value = false
-}
+  exportFileDialog.value = false;
+};
 
 const exportFileHandle = () => {
-  exportFileDialog.value = false
-}
+  exportFileDialog.value = false;
+};
 
 const exportFile = () => {
-  exportFileDialog.value = true
-}
+  exportFileDialog.value = true;
+};
 
 const loadFile = (files: FileList) => {
-  const jsonFile = files[0]
-  const { createElement } = useHandleElement()
-  if (!jsonFile) return
-  const reader = new FileReader()
-  const [ canvas ] = useCanvas()
-  reader.onload = event => {
-    const jsonContent = event.target?.result?.toString()
-    if (!jsonContent) return
-    const jsonData = JSON.parse(jsonContent)
-    canvas.setViewportTransform(jsonData.viewportTransform)
-    canvas.setZoom(jsonData.zoom)
-  }
-  reader.readAsText(jsonFile)
-}
-
+  const jsonFile = files[0];
+  const { createElement } = useHandleElement();
+  if (!jsonFile) return;
+  const reader = new FileReader();
+  const [canvas] = useCanvas();
+  reader.onload = (event) => {
+    const jsonContent = event.target?.result?.toString();
+    if (!jsonContent) return;
+    const jsonData = JSON.parse(jsonContent);
+    canvas.setViewportTransform(jsonData.viewportTransform);
+    canvas.setZoom(jsonData.zoom);
+  };
+  reader.readAsText(jsonFile);
+};
 </script>
 
 <style lang="scss" scoped>

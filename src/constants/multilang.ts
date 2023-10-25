@@ -85,5 +85,34 @@ export const MULTILANG = Object.freeze({
     align_top: "Align top",
     align_middle: "Align middle",
     align_bottom: "Align bottom",
+    adapt: "Adapt to screen",
+    lock: "Lock",
+    rotate: "Rotate",
+  },
+  background: {
+    designMode: {
+      businessCard: "Business card",
+      singlePage: "Single page",
+      customize: "Customize",
+    },
+    color: {
+      solid: "solid",
+      picture: "Picture",
+      gradient: "Gradient",
+      grid: "Grid",
+      shape: "Shape",
+      smart: "Smart",
+    },
+  },
+  style: {
+    masking: "Masking",
+    maskColor: "Mask color",
+    opacity: "Opacity",
+  },
+  export: {
+    export_img: "Export",
+    joinMyTeam: "Join my team",
+    uploadFile: "Upload file",
+    saveTemplate: "Save template",
   },
 });

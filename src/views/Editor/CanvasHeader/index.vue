@@ -146,7 +146,7 @@
         </el-row>
       </el-popover>
 
-      <el-tooltip placement="top" content="旋转">
+      <el-tooltip placement="top" :content="MULTILANG.header.rotate">
         <IconScreenRotation class="handler-item" ref="rotateRef" />
       </el-tooltip>
       <el-popover
@@ -157,7 +157,9 @@
         virtual-triggering
       >
         <el-row>
-          <el-col :span="4" class="position-text">旋转:</el-col>
+          <el-col :span="4" class="position-text"
+            >{{ MULTILANG.header.rotate }}:</el-col
+          >
           <el-col :span="7" class="position-input">
             <el-input-number
               controls-position="right"
@@ -180,7 +182,7 @@
         </el-row>
       </el-popover>
 
-      <el-tooltip placement="top" content="锁定">
+      <el-tooltip placement="top" :content="MULTILANG.header.lock">
         <IconLock
           class="handler-item"
           @click="changeElementLock(false)"
@@ -218,7 +220,7 @@
       </el-popover>
       <IconPlus class="handler-item" @click="scaleCanvas('+')" />
       <el-tooltip placement="top">
-        <template #content>适应屏幕</template>
+        <template #content>{{ MULTILANG.header.adapt }}</template>
         <IconFullScreen class="handler-item" @click="resetCanvas()" />
       </el-tooltip>
     </div>
