@@ -1,6 +1,6 @@
 <template>
   <div class="image-style-panel">
-    <div 
+    <div
       class="origin-image"
       :style="{ backgroundImage: `url(${handleElement.getSrc()})` }"
     ></div>
@@ -10,18 +10,18 @@
     <el-row class="mt-10">
       <el-button-group class="clip-image">
         <el-button class="clip-button" @click="clipImage">
-          <IconTailoring class="btn-icon" /> 裁剪图片
+          <IconTailoring class="btn-icon" /> Crop picture
         </el-button>
         <el-popover trigger="click" width="284">
           <template #reference>
             <el-button><IconDown /></el-button>
           </template>
           <div class="clip">
-            <div class="title">按形状：</div>
+            <div class="title">Shape:</div>
             <div class="shape-clip">
-              <div 
-                class="shape-clip-item" 
-                v-for="(item, key) in shapeClipPathOptions" 
+              <div
+                class="shape-clip-item"
+                v-for="(item, key) in shapeClipPathOptions"
                 :key="key"
                 @click="presetImageClip(key)"
               >
@@ -30,14 +30,17 @@
             </div>
 
             <template v-for="type in ratioClipOptions" :key="type.label">
-              <div class="title" v-if="type.label">按{{type.label}}：</div>
+              <div class="title" v-if="type.label">
+                According {{ type.label }}：
+              </div>
               <el-button-group class="row">
-                <el-button 
-                  style="flex: 1;"
+                <el-button
+                  style="flex: 1"
                   v-for="item in type.children"
                   :key="item.key"
                   @click="presetImageClip('rect', item.ratio)"
-                >{{item.key}}</el-button>
+                  >{{ item.key }}</el-button
+                >
               </el-button-group>
             </template>
           </div>
@@ -54,58 +57,75 @@
     <el-divider />
     <ElementShadow />
     <el-divider />
-    
+
     <el-row>
-      <FileInput class="full-width-btn" @change="files => replaceImage(files)" >
-        <el-button class="full-btn"><IconTransform class="btn-icon" /> 替换图片</el-button>
+      <FileInput
+        class="full-width-btn"
+        @change="(files) => replaceImage(files)"
+      >
+        <el-button class="full-btn"
+          ><IconTransform class="btn-icon" /> Replace picture</el-button
+        >
       </FileInput>
     </el-row>
     <el-row>
-      <el-button class="full-width-btn" @click="resetImage()"><IconUndo class="btn-icon" /> 重置样式</el-button>
+      <el-button class="full-width-btn" @click="resetImage()"
+        ><IconUndo class="btn-icon" /> Reset image</el-button
+      >
     </el-row>
     <el-row>
-      <el-button class="full-width-btn" @click="setBackgroundImage()"><IconTheme class="btn-icon" /> 设为背景</el-button>
+      <el-button class="full-width-btn" @click="setBackgroundImage()"
+        ><IconTheme class="btn-icon" /> Set as background</el-button
+      >
     </el-row>
-    
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useMainStore, useTemplatesStore, useFabricStore } from '@/store'
-import { CLIPPATHS } from '@/configs/imageClip'
-import { ImageElement, CropElement, CanvasElement, RectElement } from '@/types/canvas'
-import ElementOutline from '../Components/ElementOutline.vue'
-import ElementShadow from '../Components/ElementShadow.vue'
-import ElementFlip from '../Components/ElementFlip.vue'
-import ElementFilter from '../Components/ElementFilter.vue'
-import ElementMask from '../Components/ElementMask.vue'
-import * as fabric from 'fabric'
-import { ratioClipOptions } from '@/configs/images'
-import useCanvas from '@/views/Canvas/useCanvas'
-import { ElementNames } from '@/types/elements'
-import { nanoid } from 'nanoid'
-import useCanvasZindex from '@/hooks/useCanvasZindex'
-import { getImageDataURL } from '@/utils/image'
-import { toObjectFilter, WorkSpaceName } from '@/configs/canvas'
+import { computed, watch, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useMainStore, useTemplatesStore, useFabricStore } from "@/store";
+import { CLIPPATHS } from "@/configs/imageClip";
+import {
+  ImageElement,
+  CropElement,
+  CanvasElement,
+  RectElement,
+} from "@/types/canvas";
+import ElementOutline from "../Components/ElementOutline.vue";
+import ElementShadow from "../Components/ElementShadow.vue";
+import ElementFlip from "../Components/ElementFlip.vue";
+import ElementFilter from "../Components/ElementFilter.vue";
+import ElementMask from "../Components/ElementMask.vue";
+import * as fabric from "fabric";
+import { ratioClipOptions } from "@/configs/images";
+import useCanvas from "@/views/Canvas/useCanvas";
+import { ElementNames } from "@/types/elements";
+import { nanoid } from "nanoid";
+import useCanvasZindex from "@/hooks/useCanvasZindex";
+import { getImageDataURL } from "@/utils/image";
+import { toObjectFilter, WorkSpaceName } from "@/configs/canvas";
 
-const shapeClipPathOptions = CLIPPATHS
+const shapeClipPathOptions = CLIPPATHS;
 
-const mainStore = useMainStore()
-const fabricStore = useFabricStore()
-const templatesStore = useTemplatesStore()
-const [ canvas ] = useCanvas()
-const { canvasObject } = storeToRefs(mainStore)
-const { isCropping } = storeToRefs(fabricStore)
-const { setZindex } = useCanvasZindex()
-const handleElement = computed(() => canvasObject.value as ImageElement)
-
+const mainStore = useMainStore();
+const fabricStore = useFabricStore();
+const templatesStore = useTemplatesStore();
+const [canvas] = useCanvas();
+const { canvasObject } = storeToRefs(mainStore);
+const { isCropping } = storeToRefs(fabricStore);
+const { setZindex } = useCanvasZindex();
+const handleElement = computed(() => canvasObject.value as ImageElement);
 
 // 打开自由裁剪
 const clipImage = () => {
-  if (!handleElement.value || handleElement.value.type !== ElementNames.IMAGE || isCropping.value) return
-  handleElement.value.isCropping = true
+  if (
+    !handleElement.value ||
+    handleElement.value.type !== ElementNames.IMAGE ||
+    isCropping.value
+  )
+    return;
+  handleElement.value.isCropping = true;
   // canvas.discardActiveObject()
   // mainStore.setCanvasObject(null)
   // const scaleX = handleElement.value.scaleX ? handleElement.value.scaleX : 1, scaleY = handleElement.value.scaleY ? handleElement.value.scaleY : 1
@@ -122,7 +142,7 @@ const clipImage = () => {
   //   // @ts-ignore
   //   templatesStore.updateElement({id: _handleElement.id, props: _handleElement.toObject(toObjectFilter)})
   // }
-  
+
   // isCroping.value = true
   // canvas.selection = false
   // const cropElement = new fabric.Rect({
@@ -153,7 +173,7 @@ const clipImage = () => {
   // cropElement.setCoords()
   // setZindex(canvas)
   // addMask(_handleElement, cropElement as CropElement)
-}
+};
 
 // const addImageMask = (imageElement: ImageElement, cropElement: CropElement) => {
 //   const imageLeft = imageElement.left ? imageElement.left : 0, imageTop = imageElement.top ? imageElement.top : 0
@@ -165,16 +185,16 @@ const clipImage = () => {
 //   const outerRightPoint = imageElement.getPointByOrigin('right', 'bottom')
 
 //   const maskPath = `
-//   M${outerLeftPoint.x} ${outerLeftPoint.y} 
-//   L${outerRightPoint.x} ${outerLeftPoint.y} 
-//   L${outerRightPoint.x} ${outerRightPoint.y} 
-//   L${outerLeftPoint.x} ${outerRightPoint.y} 
-//   L${outerLeftPoint.x} ${outerLeftPoint.y} Z 
+//   M${outerLeftPoint.x} ${outerLeftPoint.y}
+//   L${outerRightPoint.x} ${outerLeftPoint.y}
+//   L${outerRightPoint.x} ${outerRightPoint.y}
+//   L${outerLeftPoint.x} ${outerRightPoint.y}
+//   L${outerLeftPoint.x} ${outerLeftPoint.y} Z
 
-//   M${innerLeftPoint.x} ${innerLeftPoint.y} 
-//   L${interRIghtPoint.x} ${innerLeftPoint.y} 
-//   L${interRIghtPoint.x} ${interRIghtPoint.y} 
-//   L${innerLeftPoint.x} ${interRIghtPoint.y} 
+//   M${innerLeftPoint.x} ${innerLeftPoint.y}
+//   L${interRIghtPoint.x} ${innerLeftPoint.y}
+//   L${interRIghtPoint.x} ${interRIghtPoint.y}
+//   L${innerLeftPoint.x} ${interRIghtPoint.y}
 //   L${innerLeftPoint.x} ${innerLeftPoint.y} Z`
 //   const cropMask = new fabric.Path(maskPath, {
 //     left: imageLeft - imageWidth / 2,
@@ -194,16 +214,14 @@ const clipImage = () => {
 
 // 预设裁剪
 const presetImageClip = (shape: string, ratio = 0) => {
-  const _handleElement = handleElement.value
+  const _handleElement = handleElement.value;
 
   // 纵横比裁剪（形状固定为矩形）
   if (ratio) {
     // const imageRatio = originHeight / originWidth
-
     // const min = 0
     // const max = 100
     // let range: [[number, number], [number, number]]
-
     // if (imageRatio > ratio) {
     //   const distance = ((1 - ratio / imageRatio) / 2) * 100
     //   range = [[min, distance], [max, max - distance]]
@@ -233,37 +251,33 @@ const presetImageClip = (shape: string, ratio = 0) => {
     // })
   }
   // clipImage()
-  // 
-}
+  //
+};
 
 // 替换图片（保持当前的样式）
 const replaceImage = (files: FileList) => {
-  const imageFile = files[0]
-  if (!imageFile) return
-  getImageDataURL(imageFile).then(dataURL => {
-    const props = { src: dataURL }
-    handleElement.value.setSrc(dataURL)
+  const imageFile = files[0];
+  if (!imageFile) return;
+  getImageDataURL(imageFile).then((dataURL) => {
+    const props = { src: dataURL };
+    handleElement.value.setSrc(dataURL);
     // @ts-ignore
-    templatesStore.updateElement({ id: handleElement.value.id, props })
-  })
-  
-}
+    templatesStore.updateElement({ id: handleElement.value.id, props });
+  });
+};
 
 // 重置图片：清除全部样式
 const resetImage = () => {
-  handleElement.value.filters = []
-  handleElement.value.applyFilters()
+  handleElement.value.filters = [];
+  handleElement.value.applyFilters();
   // @ts-ignore
-  const props = handleElement.value.toObject(toObjectFilter)
-  templatesStore.updateElement({ id: props.id,  props})
-
-  
-}
+  const props = handleElement.value.toObject(toObjectFilter);
+  templatesStore.updateElement({ id: props.id, props });
+};
 
 // 将图片设置为背景
 const setBackgroundImage = () => {
   // const _handleElement = handleElement.value as PPTImageElement
-
   // const background: SlideBackground = {
   //   ...currentSlide.value.background,
   //   type: 'image',
@@ -271,8 +285,8 @@ const setBackgroundImage = () => {
   //   imageSize: 'cover',
   // }
   // slidesStore.updateSlide({ background })
-  // 
-}
+  //
+};
 </script>
 
 <style lang="scss" scoped>

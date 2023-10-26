@@ -2,39 +2,67 @@
   <div class="export-img-dialog">
     <div class="configs">
       <div class="row">
-        <div class="title">导出格式：</div>
+        <div class="title">Export format:</div>
         <el-radio-group class="config-item" v-model="format">
-          <el-radio-button style="width: 50%;" value="jpeg" label="jpeg">JPEG</el-radio-button>
-          <el-radio-button style="width: 50%;" value="png" label="png">PNG</el-radio-button>
+          <el-radio-button style="width: 50%" value="jpeg" label="jpeg"
+            >JPEG</el-radio-button
+          >
+          <el-radio-button style="width: 50%" value="png" label="png"
+            >PNG</el-radio-button
+          >
         </el-radio-group>
       </div>
       <div class="row">
-        <div class="title">导出范围：</div>
+        <div class="title">Export range:</div>
         <el-radio-group class="config-item" v-model="rangeType">
-          <el-radio-button style="width: 50%;" value="all" label="all">全部</el-radio-button>
-          <el-radio-button style="width: 50%;" value="current" label="current">当前页</el-radio-button>
+          <el-radio-button style="width: 50%" value="all" label="all"
+            >All</el-radio-button
+          >
+          <el-radio-button style="width: 50%" value="current" label="current"
+            >Current page</el-radio-button
+          >
           <!-- <el-radio-button style="width: 33.33%;" value="custom" label="custom">自定义</el-radio-button> -->
         </el-radio-group>
       </div>
       <div class="row" v-if="rangeType === 'custom'">
-        <div class="title" :data-range="`（${range[0]} ~ ${range[1]}）`">自定义范围：</div>
-        <el-slider class="config-item" range :min="1" :max="templates.length" :step="1" v-model="range"/>
+        <div class="title" :data-range="`（${range[0]} ~ ${range[1]}）`">
+          Custom scope:
+        </div>
+        <el-slider
+          class="config-item"
+          range
+          :min="1"
+          :max="templates.length"
+          :step="1"
+          v-model="range"
+        />
       </div>
 
       <div class="row">
-        <div class="title">图片质量：</div>
-        <el-slider class="config-item" :min="0" :max="1" :step="0.1" v-model="quality"/>
+        <div class="title">Picture quality:</div>
+        <el-slider
+          class="config-item"
+          :min="0"
+          :max="1"
+          :step="0.1"
+          v-model="quality"
+        />
       </div>
 
       <div class="row">
-        <div class="title">图片分辨率：</div>
+        <div class="title">Image resolution:</div>
         <el-radio-group class="config-item" v-model="dpiType">
-          <el-radio-button style="width: 33.33%;" :value="72" :label="72">72DPI</el-radio-button>
-          <el-radio-button style="width: 33.33%;" :value="150" :label="150">150DPI</el-radio-button>
-          <el-radio-button style="width: 33.33%;" :value="300" :label="300">300DPI</el-radio-button>
+          <el-radio-button style="width: 33.33%" :value="72" :label="72"
+            >72DPI</el-radio-button
+          >
+          <el-radio-button style="width: 33.33%" :value="150" :label="150"
+            >150DPI</el-radio-button
+          >
+          <el-radio-button style="width: 33.33%" :value="300" :label="300"
+            >300DPI</el-radio-button
+          >
         </el-radio-group>
       </div>
-
 
       <div class="row">
         <!-- <div class="title">忽略字体：</div>
@@ -48,7 +76,7 @@
             <el-switch v-model="ignoreWebfont" />
           </el-tooltip>
         </div> -->
-        <div class="title">忽略出血：</div>
+        <div class="title">Ignore bleeding:</div>
         <div class="config-item">
           <el-switch v-model="ignoreClip" />
         </div>
@@ -56,39 +84,43 @@
     </div>
 
     <div class="btns">
-      <el-button class="btn export" type="primary" @click="downloaImage()" v-loading.fullscreen.lock="Exporting">导出图片</el-button>
-      <el-button class="btn close" @click="emit('close')">关闭</el-button>
+      <el-button
+        class="btn export"
+        type="primary"
+        @click="downloaImage()"
+        v-loading.fullscreen.lock="Exporting"
+        >Export pictures</el-button
+      >
+      <el-button class="btn close" @click="emit('close')">Close</el-button>
     </div>
-
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useTemplatesStore } from '@/store'
-import useCanvasExport from '@/hooks/useCanvasExport'
-import { ImageFormat } from 'jspdf'
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useTemplatesStore } from "@/store";
+import useCanvasExport from "@/hooks/useCanvasExport";
+import { ImageFormat } from "jspdf";
 
 const emit = defineEmits<{
-  (event: 'close'): void
-}>()
+  (event: "close"): void;
+}>();
 
-const { templates } = storeToRefs(useTemplatesStore())
-const { Exporting, exportImage } = useCanvasExport()
+const { templates } = storeToRefs(useTemplatesStore());
+const { Exporting, exportImage } = useCanvasExport();
 
-
-const rangeType = ref<'all' | 'current' | 'custom'>('current')
-const dpiType = ref<number>(300)
-const range = ref<[number, number]>([1, templates.value.length])
-const format = ref<'jpeg' | 'png' | 'jpg'>('jpeg')
-const quality = ref(1)
-const ignoreWebfont = ref(false)
-const ignoreClip = ref(true)
+const rangeType = ref<"all" | "current" | "custom">("current");
+const dpiType = ref<number>(300);
+const range = ref<[number, number]>([1, templates.value.length]);
+const format = ref<"jpeg" | "png" | "jpg">("jpeg");
+const quality = ref(1);
+const ignoreWebfont = ref(false);
+const ignoreClip = ref(true);
 
 const downloaImage = () => {
-  exportImage(format.value, quality.value, dpiType.value, ignoreClip.value)
-}
+  exportImage(format.value, quality.value, dpiType.value, ignoreClip.value);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -105,7 +137,7 @@ const downloaImage = () => {
   @include absolute-0();
 
   &::after {
-    content: '';
+    content: "";
     background-color: #fff;
     @include absolute-0();
   }

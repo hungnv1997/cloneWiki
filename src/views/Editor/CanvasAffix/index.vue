@@ -1,20 +1,43 @@
 <template>
   <div>
-    <el-affix position="bottom" :offset="45" v-show="unitMode === 0" style="width: calc(100%)">
+    <el-affix
+      position="bottom"
+      :offset="45"
+      v-show="unitMode === 0"
+      style="width: calc(100%)"
+    >
       <el-checkbox-group v-model="showWorkLines" @change="changeWorkLines">
-        <el-checkbox-button type="primary" class="clip-btn" label="clip" :checked="showClip">
-          <el-tooltip placement="top" :hide-after="0" :content="(showClip ? '隐藏' : '显示') + '出血线'">
-            <IconCuttingOne/>
+        <el-checkbox-button
+          type="primary"
+          class="clip-btn"
+          label="clip"
+          :checked="showClip"
+        >
+          <el-tooltip
+            placement="top"
+            :hide-after="0"
+            :content="(showClip ? 'Hide' : 'Show') + ' Bleeding line'"
+          >
+            <IconCuttingOne />
           </el-tooltip>
         </el-checkbox-button>
         <el-checkbox-button type="primary" label="drag" :checked="isDrag">
-          <el-tooltip placement="top" :hide-after="0" content="拖拽画布">
-            <IconClickTap/>
+          <el-tooltip placement="top" :hide-after="0" content="Drag canvas">
+            <IconClickTap />
           </el-tooltip>
         </el-checkbox-button>
-        <el-checkbox-button type="primary" class="safe-btn" label="safe" :checked="showSafe">
-          <el-tooltip placement="top" :hide-after="0" :content="(showSafe ? '隐藏' : '显示') + '安全线'">
-            <IconShield/>
+        <el-checkbox-button
+          type="primary"
+          class="safe-btn"
+          label="safe"
+          :checked="showSafe"
+        >
+          <el-tooltip
+            placement="top"
+            :hide-after="0"
+            :content="(showSafe ? 'Show' : 'Hide') + ' safety line'"
+          >
+            <IconShield />
           </el-tooltip>
         </el-checkbox-button>
       </el-checkbox-group>
@@ -23,34 +46,36 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { WorkSpaceClipType, WorkSpaceSafeType } from '@/configs/canvas'
-import { useFabricStore, useKeyboardStore, useMainStore } from '@/store'
-import { storeToRefs } from 'pinia'
-import useCanvas from '@/views/Canvas/useCanvas'
+import { ref } from "vue";
+import { WorkSpaceClipType, WorkSpaceSafeType } from "@/configs/canvas";
+import { useFabricStore, useKeyboardStore, useMainStore } from "@/store";
+import { storeToRefs } from "pinia";
+import useCanvas from "@/views/Canvas/useCanvas";
 
-const fabricStore = useFabricStore()
-const mainStore = useMainStore()
-const keyboardStore = useKeyboardStore()
-const { showClip, showSafe } = storeToRefs(fabricStore)
-const { unitMode } = storeToRefs(mainStore)
-const showWorkLines = ref<string[]>([])
-const isDrag = ref(false)
+const fabricStore = useFabricStore();
+const mainStore = useMainStore();
+const keyboardStore = useKeyboardStore();
+const { showClip, showSafe } = storeToRefs(fabricStore);
+const { unitMode } = storeToRefs(mainStore);
+const showWorkLines = ref<string[]>([]);
+const isDrag = ref(false);
 
 const changeWorkLines = () => {
-  showClip.value = showWorkLines.value.filter(item => item === 'clip').length > 0
-  showSafe.value = showWorkLines.value.filter(item => item === 'safe').length > 0
-  isDrag.value = showWorkLines.value.filter(item => item === 'drag').length > 0
-  const [ canvas ] = useCanvas()
-  const WorkSpaceClip = canvas.getObjects(WorkSpaceClipType)[0]
-  const WorkSpaceSafe = canvas.getObjects(WorkSpaceSafeType)[0]
-  if (!WorkSpaceClip && !WorkSpaceSafe) return
-  WorkSpaceClip.visible = showClip.value
-  WorkSpaceSafe.visible = showSafe.value
-  keyboardStore.setSpaceKeyState(isDrag.value)
-  canvas.renderAll()
-}
-
+  showClip.value =
+    showWorkLines.value.filter((item) => item === "clip").length > 0;
+  showSafe.value =
+    showWorkLines.value.filter((item) => item === "safe").length > 0;
+  isDrag.value =
+    showWorkLines.value.filter((item) => item === "drag").length > 0;
+  const [canvas] = useCanvas();
+  const WorkSpaceClip = canvas.getObjects(WorkSpaceClipType)[0];
+  const WorkSpaceSafe = canvas.getObjects(WorkSpaceSafeType)[0];
+  if (!WorkSpaceClip && !WorkSpaceSafe) return;
+  WorkSpaceClip.visible = showClip.value;
+  WorkSpaceSafe.visible = showSafe.value;
+  keyboardStore.setSpaceKeyState(isDrag.value);
+  canvas.renderAll();
+};
 </script>
 
 <style>

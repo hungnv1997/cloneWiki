@@ -1,7 +1,7 @@
 <template>
   <div class="element-filter">
     <div class="row">
-      <div style="flex: 2"><b>启用滤镜：</b></div>
+      <div style="flex: 2"><b>Enable filters:</b></div>
       <div class="switch-wrapper" style="flex: 3">
         <el-switch
           v-model="hasFilters"
@@ -11,7 +11,7 @@
     </div>
     <div class="filter" v-if="hasFilters">
       <el-row class="mt-10">
-        <el-col :span="5">灰度：</el-col>
+        <el-col :span="5">Grayscale:</el-col>
       </el-row>
       <el-row class="mt-10">
         <el-col :span="2"></el-col>
@@ -20,23 +20,23 @@
             <el-radio-button
               label="average"
               @click.prevent="changeGrayScaleMode('average')"
-              >平均</el-radio-button
+              >Average</el-radio-button
             >
             <el-radio-button
               label="luminosity"
               @click.prevent="changeGrayScaleMode('luminosity')"
-              >光度</el-radio-button
+              >Luminosity</el-radio-button
             >
             <el-radio-button
               label="lightness"
               @click.prevent="changeGrayScaleMode('lightness')"
-              >明亮</el-radio-button
+              >Bright</el-radio-button
             >
           </el-radio-group>
         </el-col>
       </el-row>
 
-      <el-row class="mt-10">模式：</el-row>
+      <el-row class="mt-10">Model:</el-row>
       <el-row class="mt-10">
         <el-col :span="2"></el-col>
         <el-col :span="22">
@@ -45,14 +45,16 @@
             v-model="elementFilters"
             @change="changeFilters"
           >
-            <el-checkbox-button label="Invert">倒置</el-checkbox-button>
-            <el-checkbox-button label="Sharpen">锐化</el-checkbox-button>
-            <el-checkbox-button label="Emboss">凹凸</el-checkbox-button>
+            <el-checkbox-button label="Invert">Upside down</el-checkbox-button>
+            <el-checkbox-button label="Sharpen">Sharpen</el-checkbox-button>
+            <el-checkbox-button label="Emboss"
+              >Concave & convex</el-checkbox-button
+            >
           </el-checkbox-group>
         </el-col>
       </el-row>
 
-      <el-row class="mt-10">矩阵：</el-row>
+      <el-row class="mt-10">Matrix:</el-row>
       <el-row class="mt-10">
         <el-col :span="2"></el-col>
         <el-col :span="22">
@@ -61,9 +63,11 @@
             v-model="elementFilters"
             @change="changeFilters"
           >
-            <el-checkbox-button label="Sepia">棕褐色</el-checkbox-button>
-            <el-checkbox-button label="BlackWhite">黑白色</el-checkbox-button>
-            <el-checkbox-button label="Brownie">布朗尼</el-checkbox-button>
+            <el-checkbox-button label="Sepia">Brown</el-checkbox-button>
+            <el-checkbox-button label="BlackWhite"
+              >Black and White</el-checkbox-button
+            >
+            <el-checkbox-button label="Brownie">Brownie</el-checkbox-button>
           </el-checkbox-group>
         </el-col>
       </el-row>
@@ -75,10 +79,16 @@
             v-model="elementFilters"
             @change="changeFilters"
           >
-            <el-checkbox-button label="Vintage">年份色</el-checkbox-button>
-            <el-checkbox-button label="Technicolor">特艺彩</el-checkbox-button>
-            <el-checkbox-button label="Kodachrome">柯达彩</el-checkbox-button>
-            <el-checkbox-button label="Polaroid">宝丽来</el-checkbox-button>
+            <el-checkbox-button label="Vintage"
+              >Vintage color</el-checkbox-button
+            >
+            <el-checkbox-button label="Technicolor"
+              >Technicolor</el-checkbox-button
+            >
+            <el-checkbox-button label="Kodachrome"
+              >Kodachrome</el-checkbox-button
+            >
+            <el-checkbox-button label="Polaroid">Polaroid</el-checkbox-button>
           </el-checkbox-group>
         </el-col>
       </el-row>
@@ -106,10 +116,10 @@
         </el-col>
       </el-row> -->
 
-      <el-row class="mt-10">色彩：</el-row>
+      <el-row class="mt-10">Color:</el-row>
       <el-row>
         <el-col :span="2"></el-col>
-        <el-col :span="5" class="flex-align">亮度：</el-col>
+        <el-col :span="5" class="flex-align">Brightness:</el-col>
         <el-col :span="2"></el-col>
         <el-col :span="11">
           <el-slider
@@ -125,7 +135,7 @@
       </el-row>
       <el-row>
         <el-col :span="2"></el-col>
-        <el-col :span="5" class="flex-align">对比：</el-col>
+        <el-col :span="5" class="flex-align">Compared:</el-col>
         <el-col :span="2"></el-col>
         <el-col :span="11">
           <el-slider
@@ -141,7 +151,7 @@
       </el-row>
       <el-row>
         <el-col :span="2"></el-col>
-        <el-col :span="5" class="flex-align">饱和：</el-col>
+        <el-col :span="5" class="flex-align">Saturation:</el-col>
         <el-col :span="2"></el-col>
         <el-col :span="11">
           <el-slider
@@ -173,7 +183,7 @@
       </el-row>
       <el-row>
         <el-col :span="2"></el-col>
-        <el-col :span="5" class="flex-align">色调：</el-col>
+        <el-col :span="5" class="flex-align">Bright:</el-col>
         <el-col :span="2"></el-col>
         <el-col :span="11">
           <el-slider
@@ -189,7 +199,7 @@
       </el-row>
       <el-row>
         <el-col :span="2"></el-col>
-        <el-col :span="5" class="flex-align">噪音：</el-col>
+        <el-col :span="5" class="flex-align">Noise:</el-col>
         <el-col :span="2"></el-col>
         <el-col :span="11">
           <el-slider
@@ -205,7 +215,7 @@
       </el-row>
       <el-row>
         <el-col :span="2"></el-col>
-        <el-col :span="5" class="flex-align">像素：</el-col>
+        <el-col :span="5" class="flex-align">Pixels:</el-col>
         <el-col :span="2"></el-col>
         <el-col :span="11">
           <el-slider
@@ -221,7 +231,7 @@
       </el-row>
       <el-row>
         <el-col :span="2"></el-col>
-        <el-col :span="5" class="flex-align">模糊：</el-col>
+        <el-col :span="5" class="flex-align">Vague:</el-col>
         <el-col :span="2"></el-col>
         <el-col :span="11">
           <el-slider

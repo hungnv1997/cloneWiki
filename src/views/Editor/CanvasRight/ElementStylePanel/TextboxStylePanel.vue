@@ -1,25 +1,51 @@
 <template>
-  <div class="text-style-panel">    
+  <div class="text-style-panel">
     <el-row>
       <el-col :span="12">
-        <el-select v-model="handleElement.fontFamily" @change="handleElementFontFamily">
-          <el-option-group v-for="group in fontOptionGroups" :key="group.label" :label="group.label">
-            <el-option v-for="item in group.options" :key="item" :value="item.value" :label="item.label" :style="{fontFamily: item.value}"></el-option>
+        <el-select
+          v-model="handleElement.fontFamily"
+          @change="handleElementFontFamily"
+        >
+          <el-option-group
+            v-for="group in fontOptionGroups"
+            :key="group.label"
+            :label="group.label"
+          >
+            <el-option
+              v-for="item in group.options"
+              :key="item"
+              :value="item.value"
+              :label="item.label"
+              :style="{ fontFamily: item.value }"
+            ></el-option>
           </el-option-group>
         </el-select>
       </el-col>
       <el-col :span="12">
-        <el-select v-model="handleElement.fontSize" @change="handleElementFontSize">
-          <el-option v-for="item in FontSizeLibs" :key="item" :label="item" :value="item"></el-option>
+        <el-select
+          v-model="handleElement.fontSize"
+          @change="handleElementFontSize"
+        >
+          <el-option
+            v-for="item in FontSizeLibs"
+            :key="item"
+            :label="item"
+            :value="item"
+          ></el-option>
         </el-select>
       </el-col>
-    </el-row> 
-    
+    </el-row>
+
     <el-row class="mt-10">
       <el-col :span="6">
-        <el-tooltip placement="top" content="文字颜色" :hide-after="0" >
+        <el-tooltip placement="top" content="Text color" :hide-after="0">
           <div @click.stop class="tooltip-popover">
-            <el-popover trigger="click" placement="bottom" :width="265" @click.stop>
+            <el-popover
+              trigger="click"
+              placement="bottom"
+              :width="265"
+              @click.stop
+            >
               <template #reference>
                 <el-button class="font-color">
                   <TextColorButton :color="handleElement.color">
@@ -27,13 +53,16 @@
                   </TextColorButton>
                 </el-button>
               </template>
-              <ColorPicker :modelValue="handleElement.color" @update:modelValue="color => updateFontColor(color)"/>
+              <ColorPicker
+                :modelValue="handleElement.color"
+                @update:modelValue="(color) => updateFontColor(color)"
+              />
             </el-popover>
           </div>
         </el-tooltip>
       </el-col>
       <el-col :span="6">
-        <el-tooltip placement="top" content="文字高亮" :hide-after="0">
+        <el-tooltip placement="top" content="Text highlight" :hide-after="0">
           <div @click.stop class="tooltip-popover">
             <el-popover trigger="click" placement="bottom" :width="265">
               <template #reference>
@@ -43,20 +72,31 @@
                   </TextColorButton>
                 </el-button>
               </template>
-              <ColorPicker :modelValue="handleElement.backgroundColor" @update:modelValue="color => updateBackgroundColor(color)"/>
+              <ColorPicker
+                :modelValue="handleElement.backgroundColor"
+                @update:modelValue="(color) => updateBackgroundColor(color)"
+              />
             </el-popover>
           </div>
         </el-tooltip>
       </el-col>
       <el-col :span="12">
         <el-button-group class="full-group">
-          <el-tooltip placement="top" content="增大字号" :hide-after="0">
+          <el-tooltip
+            placement="top"
+            content="Increase font size"
+            :hide-after="0"
+          >
             <el-button class="font-size" @click="handleElementFontsize('+')">
               <IconFontSize />+
             </el-button>
           </el-tooltip>
 
-          <el-tooltip placement="top" content="减小字号" :hide-after="0">
+          <el-tooltip
+            placement="top"
+            content="Reduce font size"
+            :hide-after="0"
+          >
             <el-button @click="handleElementFontsize('-')">
               <IconFontSize />-
             </el-button>
@@ -67,23 +107,35 @@
 
     <el-row class="mt-10">
       <div class="full-checkbox">
-        <el-tooltip placement="top" content="加粗" :hide-after="0">
-          <el-checkbox-button :label="hasFontWeight" @change="handleElementBlod()">
+        <el-tooltip placement="top" content="Bold" :hide-after="0">
+          <el-checkbox-button
+            :label="hasFontWeight"
+            @change="handleElementBlod()"
+          >
             <IconTextBold />
           </el-checkbox-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="斜体" :hide-after="0">
-          <el-checkbox-button v-model="hasFontStyle" @change="handleElementItalic()">
+        <el-tooltip placement="top" content="Italics" :hide-after="0">
+          <el-checkbox-button
+            v-model="hasFontStyle"
+            @change="handleElementItalic()"
+          >
             <IconTextItalic />
           </el-checkbox-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="下划线" :hide-after="0">
-          <el-checkbox-button v-model="handleElement.underline" @change="handleElementLinethrough()">
+        <el-tooltip placement="top" content="Underline" :hide-after="0">
+          <el-checkbox-button
+            v-model="handleElement.underline"
+            @change="handleElementLinethrough()"
+          >
             <IconTextUnderline />
           </el-checkbox-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="删除线" :hide-after="0">
-          <el-checkbox-button v-model="handleElement.linethrough" @change="handleElementUnderline()">
+        <el-tooltip placement="top" content="Strikethrough" :hide-after="0">
+          <el-checkbox-button
+            v-model="handleElement.linethrough"
+            @change="handleElementUnderline()"
+          >
             <IconStrikethrough />
           </el-checkbox-button>
         </el-tooltip>
@@ -92,22 +144,22 @@
 
     <el-row class="mt-10">
       <el-button-group class="full-group">
-        <el-tooltip placement="top" content="横向" :hide-after="0">
+        <el-tooltip placement="top" content="Horizontal" :hide-after="0">
           <el-button @click="handleElementStyleClear">
             <IconTextRotationNone />
           </el-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="纵向" :hide-after="0">
+        <el-tooltip placement="top" content="Portrait" :hide-after="0">
           <el-button>
             <IconTextRotationDown />
           </el-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="减小缩进" :hide-after="0">
+        <el-tooltip placement="top" content="Reduce indent" :hide-after="0">
           <el-button @click="handleElementCharSpacing('-')">
             <IconIndentLeft />
           </el-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="增大缩进" :hide-after="0">
+        <el-tooltip placement="top" content="Increase indent" :hide-after="0">
           <el-button @click="handleElementCharSpacing('+')">
             <IconIndentRight />
           </el-button>
@@ -117,17 +169,17 @@
 
     <el-row class="mt-10">
       <el-radio-group class="full-ratio" v-model="handleElement.textAlign">
-        <el-tooltip placement="top" content="左对齐" :hide-after="0">
+        <el-tooltip placement="top" content="Align left" :hide-after="0">
           <el-radio-button label="left">
             <IconAlignTextLeft />
           </el-radio-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="居中" :hide-after="0">
+        <el-tooltip placement="top" content="Center" :hide-after="0">
           <el-radio-button label="center">
             <IconAlignTextCenter />
           </el-radio-button>
         </el-tooltip>
-        <el-tooltip placement="top" content="右对齐" :hide-after="0">
+        <el-tooltip placement="top" content="Align right" :hide-after="0">
           <el-radio-button label="right">
             <IconAlignTextRight />
           </el-radio-button>
@@ -140,14 +192,32 @@
     <el-divider />
 
     <div class="row">
-      <div style="flex: 2;">行距：</div>
-      <el-select style="flex: 3" suffix-icon="IconRowHeight" v-model="handleElement.lineHeight">
-        <el-option v-for="item in LineHeightLibs" :key="item" :value="item" :label="item"></el-option>
+      <div style="flex: 2">Line spacing:</div>
+      <el-select
+        style="flex: 3"
+        suffix-icon="IconRowHeight"
+        v-model="handleElement.lineHeight"
+      >
+        <el-option
+          v-for="item in LineHeightLibs"
+          :key="item"
+          :value="item"
+          :label="item"
+        ></el-option>
       </el-select>
-      <div style="flex: 1;"></div>
-      <div style="flex: 2;">字距：</div>
-      <el-select style="flex: 3" suffix-icon="IconFullwidth" v-model="handleElement.charSpacing">
-        <el-option v-for="item in CharSpaceLibs" :key="item" :value="item" :label="item"></el-option>
+      <div style="flex: 1"></div>
+      <div style="flex: 2">Character spacing::</div>
+      <el-select
+        style="flex: 3"
+        suffix-icon="IconFullwidth"
+        v-model="handleElement.charSpacing"
+      >
+        <el-option
+          v-for="item in CharSpaceLibs"
+          :key="item"
+          :value="item"
+          :label="item"
+        ></el-option>
       </el-select>
     </div>
 
@@ -172,169 +242,170 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
-import { useMainStore, useTemplatesStore } from '@/store'
-import { storeToRefs } from 'pinia'
-import ElementStroke from '../Components/ElementStroke.vue'
-import ElementShadow from '../Components/ElementShadow.vue'
-import ElementOpacity from '../Components/ElementOpacity.vue'
-import ElementPatterns from '../Components/ElementPatterns.vue'
-import ElementFill from '../Backgrounds/ElementFill.vue'
-import { FontSizeLibs, LineHeightLibs, CharSpaceLibs } from '@/configs/texts'
-import { WEB_FONTS } from '@/configs/fonts'
-import { TextboxElement } from '@/types/canvas'
-import { FontGroupOption } from '@/types/elements'
-import useCanvas from '@/views/Canvas/useCanvas'
+import { computed, ref, watch } from "vue";
+import { useMainStore, useTemplatesStore } from "@/store";
+import { storeToRefs } from "pinia";
+import ElementStroke from "../Components/ElementStroke.vue";
+import ElementShadow from "../Components/ElementShadow.vue";
+import ElementOpacity from "../Components/ElementOpacity.vue";
+import ElementPatterns from "../Components/ElementPatterns.vue";
+import ElementFill from "../Backgrounds/ElementFill.vue";
+import { FontSizeLibs, LineHeightLibs, CharSpaceLibs } from "@/configs/texts";
+import { WEB_FONTS } from "@/configs/fonts";
+import { TextboxElement } from "@/types/canvas";
+import { FontGroupOption } from "@/types/elements";
+import useCanvas from "@/views/Canvas/useCanvas";
 
-const mainStore = useMainStore()
-const templatesStore = useTemplatesStore()
-const { canvasObject, availableFonts } = storeToRefs(mainStore)
-const [ canvas ] = useCanvas()
-const handleElement = computed(() => canvasObject.value as TextboxElement)
+const mainStore = useMainStore();
+const templatesStore = useTemplatesStore();
+const { canvasObject, availableFonts } = storeToRefs(mainStore);
+const [canvas] = useCanvas();
+const handleElement = computed(() => canvasObject.value as TextboxElement);
 
-const hasFontWeight = ref(false)
-const hasFontStyle = ref(false)
+const hasFontWeight = ref(false);
+const hasFontStyle = ref(false);
 const fontOptionGroups = ref<FontGroupOption[]>([
   {
-    label: '系统字体',
-    options: availableFonts.value
+    label: "System font",
+    options: availableFonts.value,
   },
   {
-    label: '在线字体',
-    options: WEB_FONTS
-  }
-])
+    label: "Online fonts",
+    options: WEB_FONTS,
+  },
+]);
 
 // 修改字体族
 const handleElementFontFamily = () => {
-  canvas.renderAll()
-}
+  canvas.renderAll();
+};
 
 // 修改字体族
 const handleElementFontSize = () => {
-  canvas.renderAll()
-}
+  canvas.renderAll();
+};
 
 // 修改字体颜色
 const updateFontColor = (color: string) => {
-  handleElement.value.color = color
+  handleElement.value.color = color;
   if (handleElement.value.fillType === 0) {
-    handleElement.value.fill = color
+    handleElement.value.fill = color;
   }
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 // 修改背景颜色
 const updateBackgroundColor = (color: string) => {
-  handleElement.value.backgroundColor = color
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  handleElement.value.backgroundColor = color;
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 // 修改字体大小
 const handleElementFontsize = (mode: string) => {
   if (!handleElement.value.fontSize) {
-    handleElement.value.fontSize = 36
+    handleElement.value.fontSize = 36;
   }
-  if (mode === '+') {
-    handleElement.value.fontSize += 1
+  if (mode === "+") {
+    handleElement.value.fontSize += 1;
+  } else {
+    handleElement.value.fontSize -= 1;
   }
-  else {
-    handleElement.value.fontSize -= 1
-  }
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 // 修改字体加粗
 const handleElementBlod = () => {
-  const fontBold = 'bold', fontNormal = 'normal'
+  const fontBold = "bold",
+    fontNormal = "normal";
   if (handleElement.value.isEditing) {
-    const blodState = handleElement.value.getSelectionStyles().find(item => item.fontWeight !== fontBold)
-    if (!blodState || (JSON.stringify(blodState) === '{}' && handleElement.value.fontWeight === fontBold)) {
-      handleElement.value.setSelectionStyles({'fontWeight': fontNormal})
-    } 
-    else {
-      handleElement.value.setSelectionStyles({'fontWeight': fontBold})
+    const blodState = handleElement.value
+      .getSelectionStyles()
+      .find((item) => item.fontWeight !== fontBold);
+    if (
+      !blodState ||
+      (JSON.stringify(blodState) === "{}" &&
+        handleElement.value.fontWeight === fontBold)
+    ) {
+      handleElement.value.setSelectionStyles({ fontWeight: fontNormal });
+    } else {
+      handleElement.value.setSelectionStyles({ fontWeight: fontBold });
     }
-  }
-  else {
-    const elementStyle = handleElement.value.styles
+  } else {
+    const elementStyle = handleElement.value.styles;
     if (handleElement.value.fontWeight === fontBold) {
-      handleElement.value.fontWeight = fontNormal
+      handleElement.value.fontWeight = fontNormal;
       for (let i in elementStyle) {
         for (let j in elementStyle[i]) {
-          elementStyle[i][j].fontWeight = fontNormal
+          elementStyle[i][j].fontWeight = fontNormal;
         }
       }
-    }
-    else {
-      handleElement.value.fontWeight = fontBold
+    } else {
+      handleElement.value.fontWeight = fontBold;
       for (let i in elementStyle) {
         for (let j in elementStyle[i]) {
-          elementStyle[i][j].fontWeight = fontBold
+          elementStyle[i][j].fontWeight = fontBold;
         }
       }
     }
   }
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 // 修改斜体
 const handleElementItalic = () => {
-  if (handleElement.value.fontStyle === 'italic') {
-    handleElement.value.fontStyle = 'normal'
-    hasFontStyle.value = false
-  } 
-  else {
-    handleElement.value.fontStyle = 'italic'
-    hasFontStyle.value = true
+  if (handleElement.value.fontStyle === "italic") {
+    handleElement.value.fontStyle = "normal";
+    hasFontStyle.value = false;
+  } else {
+    handleElement.value.fontStyle = "italic";
+    hasFontStyle.value = true;
   }
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 // 修改删除线
 const handleElementLinethrough = () => {
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 // 修改中划线
 const handleElementUnderline = () => {
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 // 修改缩进
-const handleElementCharSpacing = (mode: '+' | '-') => {
+const handleElementCharSpacing = (mode: "+" | "-") => {
   if (!handleElement.value.charSpacing) {
-    handleElement.value.charSpacing = 3
+    handleElement.value.charSpacing = 3;
   }
-  if (mode === '+') {
-    handleElement.value.charSpacing += 10
+  if (mode === "+") {
+    handleElement.value.charSpacing += 10;
+  } else {
+    handleElement.value.charSpacing -= 10;
   }
-  else {
-    handleElement.value.charSpacing -= 10
-  }
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 const handleElementStyleClear = () => {
-  handleElement.value.cleanStyle('fontWeight')
-  templatesStore.modifedElement()
-  canvas.renderAll()
-}
+  handleElement.value.cleanStyle("fontWeight");
+  templatesStore.modifedElement();
+  canvas.renderAll();
+};
 
 watch(handleElement, () => {
-  if (!handleElement.value) return
+  if (!handleElement.value) return;
   if (handleElement.value.fillType === 0 || !handleElement.value.fillType) {
-    handleElement.value.color = handleElement.value.fill as string
+    handleElement.value.color = handleElement.value.fill as string;
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>
@@ -373,7 +444,7 @@ watch(handleElement, () => {
   &:nth-child(2n) {
     margin-left: -1px;
   }
-  &:nth-child(n+3) {
+  &:nth-child(n + 3) {
     margin-top: -1px;
   }
 }
@@ -426,7 +497,7 @@ watch(handleElement, () => {
     flex: 1;
   }
   .el-radio-button__inner {
-    width: 100%
+    width: 100%;
   }
 }
 
@@ -434,7 +505,6 @@ watch(handleElement, () => {
   display: flex;
   flex: 1;
 }
-
 </style>
 
 <style scoped>

@@ -4,29 +4,54 @@
       <el-input></el-input>
     </el-row>
     <div class="code-content">
-      <div class="title">码样式：</div>
-      <el-carousel type="card" height="135px" :autoplay="false" trigger="click" indicator-position="none">
+      <div class="title">Code style:</div>
+      <el-carousel
+        type="card"
+        height="135px"
+        :autoplay="false"
+        trigger="click"
+        indicator-position="none"
+      >
         <el-carousel-item v-for="item in QRCodeStyleLibs" :key="item">
           <div justify="center" @click="createElement(item.name)">
-            <img v-if="item.name !== 'C2'" :src="`data:image/svg+xml;base64,` + Base64.encode(generateQRCodeMap[item.name](getEncodeData()))" :alt="item.name">
-            <img v-else :src="c2QRURL" alt="">
+            <img
+              v-if="item.name !== 'C2'"
+              :src="
+                `data:image/svg+xml;base64,` +
+                Base64.encode(generateQRCodeMap[item.name](getEncodeData()))
+              "
+              :alt="item.name"
+            />
+            <img v-else :src="c2QRURL" alt="" />
           </div>
         </el-carousel-item>
       </el-carousel>
-      <div class="title">码内容：</div>
+      <div class="title">Code content:</div>
       <div class="row">
         <el-input v-model="codeContent" @change="updateCodeContent"></el-input>
       </div>
-      <div class="title">码边距：</div>
+      <div class="title">Code margin:</div>
       <div class="row">
-        <el-radio-group class="full-ratio" v-model="codeSpace" @change="updateCodeSpace">
-          <el-radio-button :value="true" :label="true">无边距</el-radio-button>
-          <el-radio-button :value="false" :label="false">标准边距</el-radio-button>
+        <el-radio-group
+          class="full-ratio"
+          v-model="codeSpace"
+          @change="updateCodeSpace"
+        >
+          <el-radio-button :value="true" :label="true"
+            >Borderless</el-radio-button
+          >
+          <el-radio-button :value="false" :label="false"
+            >Standard margins</el-radio-button
+          >
         </el-radio-group>
       </div>
-      <div class="title">容错率：</div>
+      <div class="title">Fault tolerance:</div>
       <div class="row">
-        <el-radio-group class="full-ratio" v-model="codeError" @change="updateCodeError">
+        <el-radio-group
+          class="full-ratio"
+          v-model="codeError"
+          @change="updateCodeError"
+        >
           <el-radio-button :label="0">7%</el-radio-button>
           <el-radio-button :label="1">15%</el-radio-button>
           <el-radio-button :label="2">25%</el-radio-button>
@@ -38,10 +63,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { Base64 } from 'js-base64'
-import { QRCodeStyleLibs } from '@/configs/codeStyles'
-import { 
+import { ref, onMounted } from "vue";
+import { Base64 } from "js-base64";
+import { QRCodeStyleLibs } from "@/configs/codeStyles";
+import {
   encodeData,
   renderer25D,
   rendererRect,
@@ -56,45 +81,45 @@ import {
   rendererLine2,
   rendererFuncA,
   rendererFuncB,
-} from 'beautify-qrcode'
-import useCreateElement from '@/hooks/useCreateElement'
+} from "beautify-qrcode";
+import useCreateElement from "@/hooks/useCreateElement";
 
-const { createQRCodeElement } = useCreateElement()
-const codeContent = ref<string>(window.location.href)
-const codeSpace = ref<boolean>(true)
-const codeError = ref<number>(0)
-const c2QRURL = ref<string>('')
+const { createQRCodeElement } = useCreateElement();
+const codeContent = ref<string>(window.location.href);
+const codeSpace = ref<boolean>(true);
+const codeError = ref<number>(0);
+const c2QRURL = ref<string>("");
 
 const generateQRCodeMap = {
-  'A1': rendererRect,
-  'A2': rendererRound,
-  'A3': rendererRandRound,
-  'SP1': rendererDSJ,
-  'SP2': rendererRandRect,
-  'SP3': rendererCircle,
-  'B1': renderer25D,
-  'C1': rendererImage,
-  'C2': rendererResImage,
-  'A_a1': rendererLine,
-  'A_a2': rendererLine2,
-  'A_b1': rendererFuncA,
-  'A_b2': rendererFuncB,
-}
+  A1: rendererRect,
+  A2: rendererRound,
+  A3: rendererRandRound,
+  SP1: rendererDSJ,
+  SP2: rendererRandRect,
+  SP3: rendererCircle,
+  B1: renderer25D,
+  C1: rendererImage,
+  C2: rendererResImage,
+  A_a1: rendererLine,
+  A_a2: rendererLine2,
+  A_b1: rendererFuncA,
+  A_b2: rendererFuncB,
+};
 
 // 输入二位码内容
 const updateCodeContent = () => {
-  getEncodeData()
-}
+  getEncodeData();
+};
 
 // 修改码边距
 const updateCodeSpace = () => {
-  getEncodeData()
-}
+  getEncodeData();
+};
 
 // 修改容错率
 const updateCodeError = () => {
-  getEncodeData()
-}
+  getEncodeData();
+};
 
 // 获取qrcode
 const getEncodeData = (width = 135, height = 135) => {
@@ -103,15 +128,23 @@ const getEncodeData = (width = 135, height = 135) => {
     width,
     height,
     correctLevel: codeError.value,
-    isSpace: codeSpace.value
-  }
-  return encodeData(codeOption)
-}
+    isSpace: codeSpace.value,
+  };
+  return encodeData(codeOption);
+};
 
 const createElement = (style: string) => {
-  const src = `data:image/svg+xml;base64,` + Base64.encode(generateQRCodeMap[style](getEncodeData(50, 50)))
-  createQRCodeElement(src, style, codeContent.value, codeError.value, codeSpace.value)
-}
+  const src =
+    `data:image/svg+xml;base64,` +
+    Base64.encode(generateQRCodeMap[style](getEncodeData(50, 50)));
+  createQRCodeElement(
+    src,
+    style,
+    codeContent.value,
+    codeError.value,
+    codeSpace.value
+  );
+};
 </script>
 
 <style lang="scss" scoped>
@@ -154,7 +187,7 @@ const createElement = (style: string) => {
     outline: 0;
   }
   .el-radio-button__inner {
-    width: 100%
+    width: 100%;
   }
 }
 .layout-templates {
@@ -185,7 +218,7 @@ const createElement = (style: string) => {
   display: inline-flex;
   outline: 0;
   flex: 1;
-  width: 25%
+  width: 25%;
 }
 .el-carousel__item {
   border-radius: 10px;

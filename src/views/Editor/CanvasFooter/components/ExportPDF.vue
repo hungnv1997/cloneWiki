@@ -2,14 +2,18 @@
   <div class="export-pdf-dialog">
     <div class="configs">
       <div class="row">
-        <div class="title">导出范围：</div>
+        <div class="title">Export range:</div>
         <el-radio-group class="config-item" v-model="rangeType">
-          <el-radio-button style="width: 50%;" value="all">全部页面</el-radio-button>
-          <el-radio-button style="width: 50%;" value="current">当前页面</el-radio-button>
+          <el-radio-button style="width: 50%" value="all"
+            >All pages</el-radio-button
+          >
+          <el-radio-button style="width: 50%" value="current"
+            >The current page</el-radio-button
+          >
         </el-radio-group>
       </div>
       <div class="row">
-        <div class="title">每页数量：</div>
+        <div class="title">Quantity per page:</div>
         <el-select class="config-item" v-model:value="count">
           <el-option :value="1">1</el-option>
           <el-option :value="2">2</el-option>
@@ -17,46 +21,49 @@
         </el-select>
       </div>
       <div class="row">
-        <div class="title">边缘留白：</div>
+        <div class="title">Leave the edges blank:</div>
         <div class="config-item">
           <el-switch v-model:checked="padding" />
         </div>
       </div>
       <div class="tip">
-        注意：若打印预览与实际样式不一致，请在弹出的打印窗口中勾选【背景图形】选项。
+        Note: If the print preview is inconsistent with the actual style, please
+        check the [Background Graphics] option in the pop-up print window.
       </div>
     </div>
 
     <div class="btns">
-      <el-button class="btn export" type="primary" @click="expPDF()">导出PDF</el-button>
-      <el-button class="btn close" @click="emit('close')">关闭</el-button>
+      <el-button class="btn export" type="primary" @click="expPDF()"
+        >Export PDF</el-button
+      >
+      <el-button class="btn close" @click="emit('close')">Close</el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import useCanvasExport from '@/hooks/useCanvasExport'
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import useCanvasExport from "@/hooks/useCanvasExport";
 // import { useSlidesStore } from '@/store'
 // import { print } from '@/utils/print'
 
 // import ThumbnailSlide from '@/views/components/ThumbnailSlide/index.vue'
 
-const { exportPDF } = useCanvasExport()
+const { exportPDF } = useCanvasExport();
 
 const emit = defineEmits<{
-  (event: 'close'): void
-}>()
+  (event: "close"): void;
+}>();
 
 // const { slides, currentSlide, viewportRatio } = storeToRefs(useSlidesStore())
 
-const rangeType = ref<'all' | 'current'>('all')
-const count = ref(1)
-const padding = ref(false)
+const rangeType = ref<"all" | "current">("all");
+const count = ref(1);
+const padding = ref(false);
 
 const expPDF = () => {
-  exportPDF()
+  exportPDF();
   // if (!pdfThumbnailsRef.value) return
   // const pageSize = {
   //   width: 1600,
@@ -64,7 +71,7 @@ const expPDF = () => {
   //   margin: padding.value ? 50 : 0,
   // }
   // print(pdfThumbnailsRef.value, pageSize)
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -81,7 +88,7 @@ const expPDF = () => {
   @include absolute-0();
 
   &::after {
-    content: '';
+    content: "";
     background-color: #fff;
     @include absolute-0();
   }

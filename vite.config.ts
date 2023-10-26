@@ -6,15 +6,14 @@
  * @LastEditTime: 2023-05-26 08:43:28
  */
 
-
 import { VitePWA } from "vite-plugin-pwa";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import { createHtmlPlugin } from "vite-plugin-html";
 import type { ConfigEnv, UserConfigExport } from "vite";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
-import autoprefixer from 'autoprefixer';
-import viteCompression from 'vite-plugin-compression';
+import autoprefixer from "autoprefixer";
+import viteCompression from "vite-plugin-compression";
 
 export default ({ command }: ConfigEnv): UserConfigExport => {
   return {
@@ -25,8 +24,8 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
         verbose: true,
         disable: false,
         threshold: 10240,
-        algorithm: 'gzip',
-        ext: '.gz',
+        algorithm: "gzip",
+        ext: ".gz",
       }),
       VitePWA({
         registerType: "autoUpdate",
@@ -57,8 +56,8 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
           ],
         },
         manifest: {
-          name: "vue-fabric-draw",
-          short_name: "vue-fabric-draw",
+          name: "VietHung",
+          short_name: "VietHung",
           theme_color: "#d14424",
           icons: [
             {
@@ -99,16 +98,14 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
         minify: true,
         inject: {
           data: {
-            title: 'vue-fabric-draw'
-          }
-        }
-      })
+            title: "JustinL.V3U",
+          },
+        },
+      }),
     ],
     css: {
       postcss: {
-        plugins: [
-          autoprefixer()
-        ]
+        plugins: [autoprefixer()],
       },
       preprocessorOptions: {
         scss: {
@@ -145,12 +142,12 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       rollupOptions: {
         output: {
           manualChunks: {
-            vue: ['vue'],
-            fabric: ['fabric'],
-            'element-plus': ['element-plus']
-          }
-        }
-      }
+            vue: ["vue"],
+            fabric: ["fabric"],
+            "element-plus": ["element-plus"],
+          },
+        },
+      },
     },
   };
 };

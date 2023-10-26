@@ -1,40 +1,56 @@
 <template>
   <div class="line-style-panel">
     <div class="row">
-      <div style="flex: 2;">线条样式：</div>
-      <el-select style="flex: 3;" v-model="lineStyle" @change="changeLineStyle">
-        <el-option :value="0" label="实线"></el-option>
-        <el-option :value="1" label="虚线"></el-option>
+      <div style="flex: 2">Line style:</div>
+      <el-select style="flex: 3" v-model="lineStyle" @change="changeLineStyle">
+        <el-option :value="0" label="Solid line"></el-option>
+        <el-option :value="1" label="Dotted line"></el-option>
       </el-select>
     </div>
     <div class="row">
-      <div style="flex: 2;">线条颜色：</div>
-      <el-popover trigger="click" width="265"> 
+      <div style="flex: 2">Line color:</div>
+      <el-popover trigger="click" width="265">
         <template #reference>
-          <ColorButton :color="handleElement.stroke" style="flex: 3;" />
+          <ColorButton :color="handleElement.stroke" style="flex: 3" />
         </template>
-        <ColorPicker :modelValue="handleElement.stroke" @update:modelValue="color => updateStrokeColor(color)"/>
+        <ColorPicker
+          :modelValue="handleElement.stroke"
+          @update:modelValue="(color) => updateStrokeColor(color)"
+        />
       </el-popover>
     </div>
     <div class="row">
-      <div style="flex: 2;">线条宽度：</div>
-      <el-input-number :min="1" style="flex: 3;" v-model="handleElement.strokeWidth" @change="updateTemplateElement"></el-input-number>
+      <div style="flex: 2">Line width:</div>
+      <el-input-number
+        :min="1"
+        style="flex: 3"
+        v-model="handleElement.strokeWidth"
+        @change="updateTemplateElement"
+      ></el-input-number>
     </div>
-    
+
     <div class="row">
-      <div style="flex: 2;">起点样式：</div>
-      <el-select style="flex: 3;" v-model="handleElement.startStyle" @change="(value) => updateLineStyle(value, 'start')">
-        <el-option value="0" label="无"></el-option>
-        <el-option value="triangle" label="箭头"></el-option>
-        <el-option value="circle" label="圆点"></el-option>
+      <div style="flex: 2">Starting point style:</div>
+      <el-select
+        style="flex: 3"
+        v-model="handleElement.startStyle"
+        @change="(value) => updateLineStyle(value, 'start')"
+      >
+        <el-option value="0" label="None"></el-option>
+        <el-option value="triangle" label="Triangle"></el-option>
+        <el-option value="circle" label="Circle"></el-option>
       </el-select>
     </div>
     <div class="row">
-      <div style="flex: 2;">终点样式：</div>
-      <el-select style="flex: 3;" v-model="handleElement.endStyle" @change="(value) => updateLineStyle(value, 'end')">
-        <el-option value="0" label="无"></el-option>
-        <el-option value="triangle" label="箭头"></el-option>
-        <el-option value="circle" label="圆点"></el-option>
+      <div style="flex: 2">End point style:</div>
+      <el-select
+        style="flex: 3"
+        v-model="handleElement.endStyle"
+        @change="(value) => updateLineStyle(value, 'end')"
+      >
+        <el-option value="0" label="None"></el-option>
+        <el-option value="triangle" label="Triangle"></el-option>
+        <el-option value="circle" label="Circle"></el-option>
       </el-select>
     </div>
 
@@ -44,141 +60,150 @@
 </template>
 
 <script lang="ts" setup>
-import { toObjectFilter, WorkSpaceName } from '@/configs/canvas'
+import { toObjectFilter, WorkSpaceName } from "@/configs/canvas";
 
-import { useMainStore, useTemplatesStore } from '@/store'
-import useCanvas from '@/views/Canvas/useCanvas'
-import * as fabric from 'fabric'
-import { LineElement } from '@/types/canvas'
-import { storeToRefs } from 'pinia'
-import { computed, ref, watch } from 'vue'
-import ElementShadow from '../Components/ElementShadow.vue'
+import { useMainStore, useTemplatesStore } from "@/store";
+import useCanvas from "@/views/Canvas/useCanvas";
+import * as fabric from "fabric";
+import { LineElement } from "@/types/canvas";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
+import ElementShadow from "../Components/ElementShadow.vue";
 
-const mainStore = useMainStore()
-const templatesStore = useTemplatesStore()
-const { canvasObject } = storeToRefs(mainStore)
-const [ canvas ] = useCanvas()
-const handleElement = computed(() => canvasObject.value as LineElement)
-const lineStyle = ref<number>(0)
+const mainStore = useMainStore();
+const templatesStore = useTemplatesStore();
+const { canvasObject } = storeToRefs(mainStore);
+const [canvas] = useCanvas();
+const handleElement = computed(() => canvasObject.value as LineElement);
+const lineStyle = ref<number>(0);
 
-if (!handleElement.value.startStyle) handleElement.value.startStyle = '0'
-if (!handleElement.value.endStyle) handleElement.value.endStyle = '0'
+if (!handleElement.value.startStyle) handleElement.value.startStyle = "0";
+if (!handleElement.value.endStyle) handleElement.value.endStyle = "0";
 
 const updateStrokeColor = (color: string) => {
-  if (!handleElement.value) return
-  handleElement.value.stroke = color
-  updateTemplateElement()
-}
+  if (!handleElement.value) return;
+  handleElement.value.stroke = color;
+  updateTemplateElement();
+};
 
 const changeLineStyle = () => {
-  if (!handleElement.value) return
-  handleElement.value.strokeDashArray = null
+  if (!handleElement.value) return;
+  handleElement.value.strokeDashArray = null;
   if (lineStyle.value === 1) {
     handleElement.value.set({
-      strokeDashArray: [6, 6]
-    })
+      strokeDashArray: [6, 6],
+    });
   }
-  updateTemplateElement()
-}
+  updateTemplateElement();
+};
 
 const updateTemplateElement = () => {
-  const props = handleElement.value.toObject(toObjectFilter)
-  templatesStore.updateElement({ id: props.id,  props})
-  
-}
+  const props = handleElement.value.toObject(toObjectFilter);
+  templatesStore.updateElement({ id: props.id, props });
+};
 
-const updateLineStyle = (value: string, mode: 'start' | 'end') => {
+const updateLineStyle = (value: string, mode: "start" | "end") => {
   if (value === `triangle`) {
-    createTriangleElement(mode)
-  } 
-  else if (value === `circle`) {
-    createCircleElement(mode)
+    createTriangleElement(mode);
+  } else if (value === `circle`) {
+    createCircleElement(mode);
+  } else {
+    deleteLineElement(mode);
   }
-  else {
-    deleteLineElement(mode)
-  }
-}
+};
 
-const createTriangleElement = (mode: 'start' | 'end') => {
-  const lineHeight = handleElement.value.height ? handleElement.value.height : 0
-  const lineLeft = handleElement.value.left ? handleElement.value.left : 0
-  const triangleLeft = mode === 'start' ? lineLeft - lineHeight / 2 : lineLeft + lineHeight / 2
-  const [ canvas ] = useCanvas()
+const createTriangleElement = (mode: "start" | "end") => {
+  const lineHeight = handleElement.value.height
+    ? handleElement.value.height
+    : 0;
+  const lineLeft = handleElement.value.left ? handleElement.value.left : 0;
+  const triangleLeft =
+    mode === "start" ? lineLeft - lineHeight / 2 : lineLeft + lineHeight / 2;
+  const [canvas] = useCanvas();
   const triangle = new fabric.Triangle({
     // @ts-ignore
     id: `${handleElement.value.id}-${mode}-triangle`,
-    angle: handleElement.value.angle, 
-    fill: handleElement.value.stroke, 
-    top: handleElement.value.top, 
-    left: triangleLeft, 
-    height: 10, 
-    width: 20, 
-    originX: 'center', 
-    originY: 'center', 
+    angle: handleElement.value.angle,
+    fill: handleElement.value.stroke,
+    top: handleElement.value.top,
+    left: triangleLeft,
+    height: 10,
+    width: 20,
+    originX: "center",
+    originY: "center",
     selectable: false,
-    name: 'triangle'
-  })
-  canvas.add(triangle)
-  canvas.renderAll()
-  if (mode === 'start') {
-    handleElement.value.startStyle = 'triangle'
-  } 
-  else {
-    handleElement.value.endStyle = 'triangle'
+    name: "triangle",
+  });
+  canvas.add(triangle);
+  canvas.renderAll();
+  if (mode === "start") {
+    handleElement.value.startStyle = "triangle";
+  } else {
+    handleElement.value.endStyle = "triangle";
   }
-  
-  deleteLinePathElement(mode, 'circle')
-}
 
-const createCircleElement = (mode: 'start' | 'end') => {
-  const lineHeight = handleElement.value.height ? handleElement.value.height : 0
-  const lineLeft = handleElement.value.left ? handleElement.value.left : 0
-  const triangleLeft = mode === 'start' ? lineLeft - lineHeight / 2 : lineLeft + lineHeight / 2
-  const [ canvas ] = useCanvas()
+  deleteLinePathElement(mode, "circle");
+};
+
+const createCircleElement = (mode: "start" | "end") => {
+  const lineHeight = handleElement.value.height
+    ? handleElement.value.height
+    : 0;
+  const lineLeft = handleElement.value.left ? handleElement.value.left : 0;
+  const triangleLeft =
+    mode === "start" ? lineLeft - lineHeight / 2 : lineLeft + lineHeight / 2;
+  const [canvas] = useCanvas();
   const circle = new fabric.Circle({
     // @ts-ignore
     id: `${handleElement.value.id}-${mode}-circle`,
-    angle: handleElement.value.angle, 
-    fill: handleElement.value.stroke, 
-    top: handleElement.value.top, 
-    left: triangleLeft, 
+    angle: handleElement.value.angle,
+    fill: handleElement.value.stroke,
+    top: handleElement.value.top,
+    left: triangleLeft,
     radius: 10,
-    originX: 'center', 
-    originY: 'center', 
+    originX: "center",
+    originY: "center",
     selectable: false,
-    name: 'circle'
-  })
-  canvas.add(circle)
-  canvas.renderAll()
-  const circleElement = circle.toObject(toObjectFilter)
- 
-  if (mode === 'start') {
-    handleElement.value.startStyle = 'circle'
-  } 
-  else {
-    handleElement.value.endStyle = 'circle'
+    name: "circle",
+  });
+  canvas.add(circle);
+  canvas.renderAll();
+  const circleElement = circle.toObject(toObjectFilter);
+
+  if (mode === "start") {
+    handleElement.value.startStyle = "circle";
+  } else {
+    handleElement.value.endStyle = "circle";
   }
-  
-  deleteLinePathElement(mode, 'triangle')
-}
 
-const deleteLineElement = (mode: 'start' | 'end') => {
-  const lineElementIds = [`${handleElement.value.id}-${mode}-triangle`, `${handleElement.value.id}-${mode}-circle`]
-  // @ts-ignore
-  canvas.remove(...canvas.getObjects().filter(obj => lineElementIds.includes(obj.id)))
-  canvas.renderAll()
-  templatesStore.deleteElement(lineElementIds)
-  
-}
+  deleteLinePathElement(mode, "triangle");
+};
 
-const deleteLinePathElement = (mode: 'start' | 'end', path: 'triangle' | 'circle') => {
-  const lineElementIds = [`${handleElement.value.id}-${mode}-${path}`]
+const deleteLineElement = (mode: "start" | "end") => {
+  const lineElementIds = [
+    `${handleElement.value.id}-${mode}-triangle`,
+    `${handleElement.value.id}-${mode}-circle`,
+  ];
   // @ts-ignore
-  canvas.remove(...canvas.getObjects().filter(obj => lineElementIds.includes(obj.id)))
-  canvas.renderAll()
-  templatesStore.deleteElement(lineElementIds)
-  
-}
+  canvas.remove(
+    ...canvas.getObjects().filter((obj) => lineElementIds.includes(obj.id))
+  );
+  canvas.renderAll();
+  templatesStore.deleteElement(lineElementIds);
+};
+
+const deleteLinePathElement = (
+  mode: "start" | "end",
+  path: "triangle" | "circle"
+) => {
+  const lineElementIds = [`${handleElement.value.id}-${mode}-${path}`];
+  // @ts-ignore
+  canvas.remove(
+    ...canvas.getObjects().filter((obj) => lineElementIds.includes(obj.id))
+  );
+  canvas.renderAll();
+  templatesStore.deleteElement(lineElementIds);
+};
 </script>
 
 <style lang="scss" scoped>
